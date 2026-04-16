@@ -39,6 +39,7 @@ const tileStyle = {
   borderRadius: '6px',
   padding: '12px 20px',
   marginBottom: '24px',
+  position: 'relative',
 };
 
 const tileLabelStyle = {
@@ -49,13 +50,29 @@ const tileLabelStyle = {
   letterSpacing: '0.5px',
 };
 
+const redCircleBadgeStyle = {
+  position: 'absolute',
+  top: '-8px',
+  right: '-8px',
+  backgroundColor: '#c62828',
+  color: '#fff',
+  fontWeight: 700,
+  fontSize: '11px',
+  width: '20px',
+  height: '20px',
+  borderRadius: '50%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+};
+
 export default function DashboardPage() {
   return (
     <div>
       <div style={tileStyle}>
         <span style={tileLabelStyle}>Incidents</span>
-        <span style={alertBadgeStyle}>{mockAlerts.length}</span>
-        <span style={alertBadgeStyle}>{mockAlerts.length} Incident{mockAlerts.length !== 1 ? 's' : ''}</span>
+        <span style={alertBadgeStyle}>{mockAlerts.length} INCIDENTS</span>
+        <span style={redCircleBadgeStyle}>{mockAlerts.length}</span>
       </div>
 
       <div style={sectionTitle}>System Status</div>
