@@ -1,6 +1,6 @@
 import React from 'react';
 import StatusBadge from '../components/StatusBadge';
-import { mockSystems, mockAlerts } from '../data/mockDashboard';
+import { mockSystems, mockAlerts, mockWeatherForecast } from '../data/mockDashboard';
 import { formatTimestamp } from '../utils';
 
 const tableStyle = {
@@ -66,6 +66,47 @@ const redCircleBadgeStyle = {
   justifyContent: 'center',
 };
 
+const weatherRowStyle = {
+  display: 'flex',
+  gap: '12px',
+  flexWrap: 'wrap',
+  marginBottom: '32px',
+};
+
+const weatherCardStyle = {
+  backgroundColor: '#0d1f2d',
+  border: '1px solid #1e3a5f',
+  borderRadius: '6px',
+  padding: '14px 20px',
+  minWidth: '120px',
+  textAlign: 'center',
+};
+
+const weatherDayStyle = {
+  fontSize: '13px',
+  fontWeight: 700,
+  color: '#90caf9',
+  marginBottom: '6px',
+  textTransform: 'uppercase',
+  letterSpacing: '0.5px',
+};
+
+const weatherIconStyle = {
+  fontSize: '24px',
+  marginBottom: '6px',
+};
+
+const weatherConditionStyle = {
+  fontSize: '12px',
+  color: '#b0bec5',
+  marginBottom: '6px',
+};
+
+const weatherTempStyle = {
+  fontSize: '13px',
+  color: '#e0e0e0',
+};
+
 export default function DashboardPage() {
   return (
     <div>
@@ -118,6 +159,22 @@ export default function DashboardPage() {
           ))}
         </tbody>
       </table>
+
+      <div style={sectionTitle}>Weather Forecast</div>
+      <div style={weatherRowStyle}>
+        {mockWeatherForecast.map((day) => (
+          <div key={day.id} style={weatherCardStyle}>
+            <div style={weatherDayStyle}>{day.day}</div>
+            <div style={weatherIconStyle}>{day.icon}</div>
+            <div style={weatherConditionStyle}>{day.condition}</div>
+            <div style={weatherTempStyle}>
+              <span style={{ color: '#ef9a9a' }}>{day.high}°</span>
+              {' / '}
+              <span style={{ color: '#90caf9' }}>{day.low}°</span>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
