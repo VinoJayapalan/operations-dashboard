@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import StatusBadge from '../components/StatusBadge';
 import { mockSystems, mockAlerts, mockWeatherForecast } from '../data/mockDashboard';
 import { formatTimestamp } from '../utils';
@@ -108,12 +108,40 @@ const weatherTempStyle = {
 };
 
 export default function DashboardPage() {
+  const [geo, setGeo] = useState({ lat: null, lon: null, error: null });
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => setGeo({ lat: pos.coords.latitude, lon: pos.coords.longitude, error: null }),
+        (err) => setGeo({ lat: null, lon: null, error: err.message }),
+      );
+    } else {
+      setGeo({ lat: null, lon: null, error: 'Geolocation not supported' });
+    }
+  }, []);
+
+  let geoText;
+  if (geo.error) {
+    geoText = geo.error;
+  } else if (geo.lat !== null && geo.lon !== null) {
+    geoText = `${geo.lat.toFixed(4)}, ${geo.lon.toFixed(4)}`;
+  } else {
+    geoText = 'Loading...';
+  }
+
   return (
     <div>
       <div style={tileStyle}>
         <span style={tileLabelStyle}>Incidents</span>
         <span style={alertBadgeStyle}>{mockAlerts.length} INCIDENTS</span>
         <span style={redCircleBadgeStyle}>{mockAlerts.length}</span>
+      </div>
+
+      <div style={{ ...tileStyle, marginLeft: '16px' }}>
+        <span style={{ fontSize: '20px' }}>📍</span>
+        <span style={tileLabelStyle}>Your Location</span>
+        <span style={{ fontSize: '13px', color: '#e0e0e0' }}>{geoText}</span>
       </div>
 
       <div style={sectionTitle}>System Status</div>
