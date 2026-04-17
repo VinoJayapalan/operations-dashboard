@@ -132,16 +132,16 @@ export default function DashboardPage() {
 
   return (
     <div>
+      <div style={{ position: 'fixed', top: '12px', right: '24px', zIndex: 1000, ...tileStyle, marginBottom: 0 }}>
+        <span style={{ fontSize: '20px' }}>📍</span>
+        <span style={tileLabelStyle}>Your Location</span>
+        <span style={{ fontSize: '13px', color: '#e0e0e0' }}>{geoText}</span>
+      </div>
+
       <div style={tileStyle}>
         <span style={tileLabelStyle}>Incidents</span>
         <span style={alertBadgeStyle}>{mockAlerts.length} INCIDENTS</span>
         <span style={redCircleBadgeStyle}>{mockAlerts.length}</span>
-      </div>
-
-      <div style={{ ...tileStyle, marginLeft: '16px' }}>
-        <span style={{ fontSize: '20px' }}>📍</span>
-        <span style={tileLabelStyle}>Your Location</span>
-        <span style={{ fontSize: '13px', color: '#e0e0e0' }}>{geoText}</span>
       </div>
 
       <div style={sectionTitle}>System Status</div>
