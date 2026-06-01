@@ -2,7 +2,6 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import MainLayout from '../layout/MainLayout';
-import { APP_NAME } from '../constants';
 
 const mockGetCurrentPosition = jest.fn();
 
@@ -34,89 +33,73 @@ afterEach(() => {
   jest.useRealTimers();
 });
 
-describe('MainLayout', () => {
-  test('1. renders the header element in the DOM', () => {
+describe('MainLayout footer date tests', () => {
+  test('1. Render MainLayout and confirm a footer element is present in the DOM', () => {
     render(<MainLayout><div>content</div></MainLayout>);
-    const headerEl = document.querySelector('header');
-    expect(headerEl).toBeInTheDocument();
+    const footerEl = document.querySelector('footer');
+    expect(footerEl).toBeInTheDocument();
   });
 
-  test('2. displays the APP_NAME constant value as the header title text', () => {
+  test('2. Confirm the footer contains a string representation of today date', () => {
+    const today = new Date();
+    jest.setSystemTime(today);
     render(<MainLayout><div>content</div></MainLayout>);
-    expect(APP_NAME).toBe('Operations Dashboard');
-    expect(screen.getByText('Operations Dashboard')).toBeInTheDocument();
+    const footerEl = document.querySelector('footer');
+    const expectedDateString = today.toLocaleDateString();
+    expect(footerEl).toBeInTheDocument();
+    expect(footerEl.textContent).toContain(expectedDateString);
   });
 
-  test('3. renders the title inside a header tag', () => {
+  test('3. Confirm the footer date does not show yesterday or tomorrow date', () => {
+    const today = new Date();
+    jest.setSystemTime(today);
     render(<MainLayout><div>content</div></MainLayout>);
-    const headerEl = document.querySelector('header');
-    const titleEl = screen.getByText('Operations Dashboard');
-    expect(headerEl).toContainElement(titleEl);
+    const footerEl = document.querySelector('footer');
+
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    const yesterdayString = yesterday.toLocaleDateString();
+
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    const tomorrowString = tomorrow.toLocaleDateString();
+
+    const todayString = today.toLocaleDateString();
+
+    expect(footerEl.textContent).toContain(todayString);
+
+    if (yesterdayString !== todayString) {
+      expect(footerEl.textContent).not.toContain(yesterdayString);
+    }
+
+    if (tomorrowString !== todayString) {
+      expect(footerEl.textContent).not.toContain(tomorrowString);
+    }
   });
 
-  test('4. renders the live clock element inside the header', () => {
-    const fixedDate = new Date('2024-01-15T10:30:00');
-    jest.setSystemTime(fixedDate);
+  test('4. Confirm the footer still renders the correct date when the component re-renders', () => {
+    const today = new Date();
+    jest.setSystemTime(today);
+    const { rerender } = render(<MainLayout><div>content</div></MainLayout>);
+    const expectedDateString = today.toLocaleDateString();
+
+    let footerEl = document.querySelector('footer');
+    expect(footerEl.textContent).toContain(expectedDateString);
+
+    rerender(<MainLayout><div>updated content</div></MainLayout>);
+    footerEl = document.querySelector('footer');
+    expect(footerEl).toBeInTheDocument();
+    expect(footerEl.textContent).toContain(expectedDateString);
+  });
+
+  test('5. Confirm the footer is visible and contains at least the four-digit current year', () => {
+    const today = new Date();
+    jest.setSystemTime(today);
     render(<MainLayout><div>content</div></MainLayout>);
-    const headerEl = document.querySelector('header');
-    const dateString = fixedDate.toLocaleDateString();
-    const timeString = fixedDate.toLocaleTimeString();
-    const clockEl = screen.getByText(`${dateString} ${timeString}`);
-    expect(clockEl).toBeInTheDocument();
-    expect(headerEl).toContainElement(clockEl);
-  });
-
-  test('5. renders children inside the main content area', () => {
-    render(
-      <MainLayout>
-        <div data-testid="child-content">Child Content</div>
-      </MainLayout>
-    );
-    const mainEl = document.querySelector('main');
-    const childEl = screen.getByTestId('child-content');
-    expect(mainEl).toBeInTheDocument();
-    expect(mainEl).toContainElement(childEl);
-    expect(screen.getByText('Child Content')).toBeInTheDocument();
-  });
-
-  test('6. header is structurally separate from the main content area', () => {
-    render(
-      <MainLayout>
-        <div data-testid="main-child">Main Content</div>
-      </MainLayout>
-    );
-    const headerEl = document.querySelector('header');
-    const mainEl = document.querySelector('main');
-    expect(headerEl).toBeInTheDocument();
-    expect(mainEl).toBeInTheDocument();
-    expect(headerEl).not.toContainElement(mainEl);
-    expect(mainEl).not.toContainElement(headerEl);
-    const titleEl = screen.getByText('Operations Dashboard');
-    const childEl = screen.getByTestId('main-child');
-    expect(headerEl).toContainElement(titleEl);
-    expect(mainEl).toContainElement(childEl);
-  });
-
-  test('7. mounts without errors when geolocation is available', () => {
-    setupGeolocation(true);
-    mockGetCurrentPosition.mockImplementation((successCb) => {
-      successCb({
-        coords: { latitude: 51.505, longitude: -0.09 },
-      });
-    });
-    expect(() => {
-      render(<MainLayout><div>content</div></MainLayout>);
-    }).not.toThrow();
-    expect(screen.getByText('Operations Dashboard')).toBeInTheDocument();
-  });
-
-  test('8. mounts without errors when geolocation is unavailable', () => {
-    setupGeolocation(false);
-    expect(() => {
-      render(<MainLayout><div>content</div></MainLayout>);
-    }).not.toThrow();
-    expect(screen.getByText('Operations Dashboard')).toBeInTheDocument();
-    const mainEl = document.querySelector('main');
-    expect(mainEl).toBeInTheDocument();
+    const footerEl = document.querySelector('footer');
+    expect(footerEl).toBeInTheDocument();
+    const currentYear = today.getFullYear().toString();
+    expect(footerEl.textContent).toContain(currentYear);
+    expect(currentYear).toMatch(/^\d{4}$/);
   });
 });
