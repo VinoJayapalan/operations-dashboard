@@ -15,6 +15,7 @@ const styles = {
   clock: { fontSize: '16px', fontWeight: 600, color: '#90caf9', letterSpacing: '0.5px' },
   mapContainer: { width: '220px', height: '120px', borderRadius: '6px', overflow: 'hidden', border: '1px solid #1e3a5f' },
   main: { flex: 1, padding: '24px', background: 'linear-gradient(135deg, #0a0f2c 0%, #1a1a6e 50%, #0d2136 100%)' },
+  footer: { background: '#1a0050', borderTop: '2px solid #7c3aed', padding: '10px 24px', textAlign: 'center', color: '#90caf9', fontSize: '14px' },
 };
 
 export default function MainLayout({ children }) {
@@ -54,6 +55,7 @@ export default function MainLayout({ children }) {
         </div>
       </header>
       <main style={styles.main}>{children}</main>
+      <footer style={styles.footer}>Today: {time.toLocaleDateString()}</footer>
     </div>
   );
 }
