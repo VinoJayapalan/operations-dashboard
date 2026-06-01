@@ -41,7 +41,7 @@ export default function MainLayout({ children }) {
     <div style={styles.wrapper}>
       <header style={styles.header}>
         <span style={styles.title}>{APP_NAME}</span>
-        <span style={styles.clock}>{time.toLocaleTimeString()}</span>
+        <span style={styles.clock}>{time.toLocaleDateString()} {time.toLocaleTimeString()}</span>
         <div style={styles.mapContainer}>
           <iframe
             src={mapSrc}
