@@ -132,6 +132,8 @@ export default function DashboardPage() {
 
   return (
     <div>
+      <h1 style={{ fontSize: '28px', fontWeight: 700, color: '#90caf9', marginBottom: '24px', letterSpacing: '1px', borderBottom: '2px solid #7c3aed', paddingBottom: '12px' }}>Operations Dashboard</h1>
+
       <div style={{ position: 'fixed', top: '12px', right: '24px', zIndex: 1000, ...tileStyle, marginBottom: 0 }}>
         <span style={{ fontSize: '20px' }}>📍</span>
         <span style={tileLabelStyle}>Your Location</span>
