@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import DashboardPage from '../DashboardPage';
+import DashboardPage from '../pages/DashboardPage';
 
 expect.extend(toHaveNoViolations);
 
